@@ -25,7 +25,7 @@ class Column(models.Model):
 class Task(models.Model):
     column = models.ForeignKey(Column, on_delete='cascade')
     title = models.CharField(max_length=50)
-    description = models.CharField(max_lenght=280)
+    description = models.CharField(max_length=280)
     creation_date = models.DateField(default=timezone.now())
 
     def __str__(self):
