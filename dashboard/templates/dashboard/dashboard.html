@@ -2,14 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>dashboard</title>
-    {{message}}
+    <title>Dashboard</title>
 </head>
 <body>
-    <div>
-        {{boards}}
-	{{columns}}
-	{{tasks}}
-    </div>
+    <h1>Boards</h1>
+    <form action="" method="post">
+        {% for board in boards %}
+            {% csrf_token %}
+	    <a href="{% url 'board' board.name %}">{{ board.name }}</a>
+	    <br> 
+        {% endfor %}
+    </form>
 </body>
 </html>

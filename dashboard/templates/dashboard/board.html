@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Board</title>
+</head>
+<body>
+    <h1>Board: {{board.name}}</h1>
+    <hr>
+    <h1>Columns</h1>
+    {% for column in columns %}
+        <div>
+	        <h2>{{column.name}}</h2>
+		<div>
+			{% for task in column.task_set.all %}
+				<h4>Task: {{task.title}}</h4>
+				<h5>--- {{task.description}}</h5>
+			{% endfor %}
+	        </div>
+		<hr>
+		<hr>
+	</div>
+    {% endfor %}
+</body>
+</html>

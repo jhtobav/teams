@@ -10,7 +10,7 @@ class Board(models.Model):
     creation_date = models.DateField(default=timezone.now())
 
     def __str__(self):
-        return "{}-{}".format(self.board.name, self.name)
+        return self.name
 
 
 class Column(models.Model):
