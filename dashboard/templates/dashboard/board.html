@@ -10,7 +10,7 @@
     <h1>Columns</h1>
     {% for column in columns %}
         <div>
-	        <h2>{{column.name}}</h2>
+		<h2 name="column_name2" value="{{column.name}}">{{column.name}}</h2>
 		<div>
 			{% for task in column.task_set.all %}
 				<h4>Task: {{task.title}}</h4>
@@ -18,6 +18,15 @@
 			{% endfor %}
 	        </div>
 		<hr>
+		    <form action="" method="post">
+			 <h2 name="column_name" value="{{column.name}}">{{column.name}}</h2>
+			{% csrf_token %}
+			Create a new task:
+			<p>
+			Tittle: <input type="text" name="tittle">
+			Description: <input type="text" name="description">
+			<button type="submit"> Create </button>
+	            </form>	
 		<hr>
 	</div>
     {% endfor %}
