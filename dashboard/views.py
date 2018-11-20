@@ -27,12 +27,17 @@ def board(request, board_name):
         title = request.POST.get('title', None)
         description = request.POST.get('description', None)
         creation_date = timezone.now() 
+
         selected_board = Board.objects.get(name=board_name)
+        columns = selected_board.column_set.all()
+
         column_name = request.POST.get('column_name', None)
-        print(column_name)
         selected_column = selected_board.column_set.all().get(name=column_name)
-        new_task = Task.objects.create(Column=column, title=title, description=description, creation_date=creation_date)
-        context = {'message': 'Created!'}
+        selected_column.task_set.create(title=title, description=description, creation_date=creation_date)
+        context = {
+                'board': selected_board,
+                'columns': columns,
+                }
         return render(request, 'dashboard/board.html', context)
     else:
         return Http404('Not allowd')

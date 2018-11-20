@@ -19,11 +19,11 @@
 	        </div>
 		<hr>
 		    <form action="" method="post">
-			 <h2 name="column_name" value="{{column.name}}">{{column.name}}</h2>
+			<input type="hidden" name="column_name" id="" value="{{column.name}}">
 			{% csrf_token %}
 			Create a new task:
 			<p>
-			Tittle: <input type="text" name="tittle">
+			Tittle: <input type="text" name="title">
 			Description: <input type="text" name="description">
 			<button type="submit"> Create </button>
 	            </form>	
