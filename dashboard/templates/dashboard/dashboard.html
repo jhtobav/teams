@@ -13,5 +13,14 @@
 	    <br> 
         {% endfor %}
     </form>
+                <hr>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        Create a new board:
+                        <p>
+                        Name: <input type="text" name="name">
+                        <button type="submit"> Create </button>
+                    </form>
+                <hr>
 </body>
 </html>

@@ -32,5 +32,16 @@
 	</div>
     {% endfor %}
     </div>
+                <hr>
+                    <form action="" method="post">
+		        <input type="hidden" name="board_name" id="" value="{{board.name}}">
+                        {% csrf_token %}
+                        Create a new column:
+                        <p>
+                        Name: <input type="text" name="name">
+			Index: <input type="text" name="index">
+                        <button type="submit"> Create </button>
+                    </form>
+                <hr>
 </body>
 </html>
