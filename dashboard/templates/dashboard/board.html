@@ -8,6 +8,11 @@
     <h1>Board: {{board.name}}</h1>
     <hr>
     <h1>Columns</h1>
+    <hr>
+    {% if message %}
+    	{{message}}
+    {% endif %}
+    <hr>
     <div style="height:100%; width:100%; overflow: hidden;">
     {% for column in columns %}
         <div style="border:10px solid black; float:left; background-color:blue; height:80%; width:25%;">
@@ -35,6 +40,12 @@
 			<button type="submit" formaction="{% url 'create_task' board.name %}"> Create </button>
 	            </form>	
 		<hr>
+		<form action="" method="post">
+                	<input type="hidden" name="column_name" value="{{column.name}}">
+                        {% csrf_token %}
+                        <h4>Delete column: </h4>
+                        <button type="submit" formaction="{% url 'delete_column' board.name %}"> Delete </button>
+                </form>
 	</div>
     {% endfor %}
     </div>

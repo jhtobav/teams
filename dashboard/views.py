@@ -51,7 +51,33 @@ def create_column(request, board_name):
                 }
         return render(request, 'dashboard/board.html', context)
     else:
-        return Http404('NOt allowed')
+        return Http404('Not allowed')
+
+def delete_column(request, board_name):
+    if request.method == 'POST':
+        selected_board = Board.objects.get(name=board_name)
+        selected_column = selected_board.column_set.get(name=request.POST.get('column_name', None))
+        if len(selected_column.task_set.all()) < 1:
+            selected_column.delete()
+
+            columns = selected_board.column_set.all()
+            context = {
+                    'board': selected_board,
+                    'columns': columns,
+                    }
+            return render(request, 'dashboard/board.html', context)
+        else:
+            message = "The column still has tasks, it cannot be deleted"
+            columns = selected_board.column_set.all()
+
+            context = {
+                    'board' : selected_board,
+                    'message': message,
+                    'columns': columns
+                    }
+            return render(request, 'dashboard/board.html', context)
+    else:
+        return Http404('Not allowed')
 
 
 def create_task(request, board_name):
