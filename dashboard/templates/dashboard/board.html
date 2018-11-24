@@ -8,15 +8,16 @@
     <h1>Board: {{board.name}}</h1>
     <hr>
     <h1>Columns</h1>
+    <div style="height:100%; width:100%; overflow: hidden;">
     {% for column in columns %}
-        <div>
+        <div style="border:10px solid black; float:left; background-color:blue; height:80%; width:25%;">
 		<h2 name="column_name2" value="{{column.name}}">{{column.name}}</h2>
-		<div>
 			{% for task in column.task_set.all %}
+			<div style="position: relative; left:10px; border:10px solid black; background-color:green; height:80%; width:80%; " >
 				<h4>Task: {{task.title}}</h4>
 				<h5>--- {{task.description}}</h5>
+			</div>
 			{% endfor %}
-	        </div>
 		<hr>
 		    <form action="" method="post">
 			<input type="hidden" name="column_name" id="" value="{{column.name}}">
@@ -30,5 +31,6 @@
 		<hr>
 	</div>
     {% endfor %}
+    </div>
 </body>
 </html>
