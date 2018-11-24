@@ -11,22 +11,28 @@
     <div style="height:100%; width:100%; overflow: hidden;">
     {% for column in columns %}
         <div style="border:10px solid black; float:left; background-color:blue; height:80%; width:25%;">
-		<h2 name="column_name2" value="{{column.name}}">{{column.name}}</h2>
+		<h2 name="column_name" id="" value="{{column.name}}">{{column.name}}</h2>
 			{% for task in column.task_set.all %}
 			<div style="position: relative; left:10px; border:10px solid black; background-color:green; height:80%; width:80%; " >
-				<h4>Task: {{task.title}}</h4>
-				<h5>--- {{task.description}}</h5>
+				<form action="" method="post">
+					<input type="hidden" name="column_name" value="{{column.name}}">
+					<input type="hidden" name="task_title" value="{{task.title}}">
+					{% csrf_token %}
+					<h4>Task: {{task.title}}</h4>
+					<h5>--- {{task.description}}</h5>
+					<button type="submit" formaction="{% url 'delete_task' board.name %}"> Delete </button>
+				</form>
 			</div>
 			{% endfor %}
 		<hr>
 		    <form action="" method="post">
-			<input type="hidden" name="column_name" id="" value="{{column.name}}">
+			<input type="hidden" name="column_name" value="{{column.name}}">
 			{% csrf_token %}
 			Create a new task:
 			<p>
 			Tittle: <input type="text" name="title">
 			Description: <input type="text" name="description">
-			<button type="submit"> Create </button>
+			<button type="submit" formaction="{% url 'create_task' board.name %}"> Create </button>
 	            </form>	
 		<hr>
 	</div>
@@ -38,9 +44,9 @@
                         {% csrf_token %}
                         Create a new column:
                         <p>
-                        Name: <input type="text" name="name">
-			Index: <input type="text" name="index">
-                        <button type="submit"> Create </button>
+                        Name: <input type="text" name="new_column_name">
+			Index: <input type="text" name="new_column_index">
+			<button type="submit" formaction="{% url 'create_column' board.name %}"> Create </button>
                     </form>
                 <hr>
 </body>

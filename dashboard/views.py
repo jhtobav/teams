@@ -31,36 +31,65 @@ def board(request, board_name):
             'columns': columns,
             }
         return render(request, 'dashboard/board.html', context)
-    elif request.method == 'POST':
-        title = request.POST.get('title', None)
-        if title:
-            description = request.POST.get('description', None)
-            creation_date = timezone.now() 
-  
-            selected_board = Board.objects.get(name=board_name)
-            columns = selected_board.column_set.all()
-  
-            column_name = request.POST.get('column_name', None)
-            selected_column = selected_board.column_set.all().get(name=column_name)
-            selected_column.task_set.create(title=title, description=description, creation_date=creation_date)
-            context = {
-                   'board': selected_board,
-                   'columns': columns,
-                   }
-        else:
-            selected_board = Board.objects.get(name=board_name)
+    else:
+        return Http404('Not allowed')
 
-            column_name = request.POST.get('name', None)
-            column_index = request.POST.get('index', None)
-            
-            selected_board.column_set.create(name=column_name, index=column_index)
-            columns = selected_board.column_set.all()
 
-            context = {
-                    'board': selected_board,
-                    'columns': columns,
-                    }
+def create_column(request, board_name):
+    if request.method == 'POST':
+        selected_board = Board.objects.get(name=board_name)
+        column_name = request.POST.get('new_column_name', None)
+        column_index = request.POST.get('new_column_index', None)
+        
+        selected_board.column_set.create(name=column_name, index=column_index)
+
+        columns = selected_board.column_set.all()
+
+        context = {
+                'board': selected_board,
+                'columns': columns,
+                }
         return render(request, 'dashboard/board.html', context)
     else:
-        return Http404('Not allowd')
+        return Http404('NOt allowed')
+
+
+def create_task(request, board_name):
+    if request.method == 'POST':
+        selected_board = Board.objects.get(name=board_name)
+        selected_column = selected_board.column_set.get(name=request.POST.get('column_name', None))
+        task_title = request.POST.get('title', None)
+        task_description = request.POST.get('description', None)
+        
+        selected_column.task_set.create(title=task_title, description=task_description, creation_date = timezone.now())
+
+        columns = selected_board.column_set.all()
+        
+        context = {
+                'board': selected_board,
+                'columns': columns,
+                }
+        return render(request, 'dashboard/board.html', context)
+    else:
+        return Http404('Not allowed')
+
+
+def delete_task(request, board_name):
+    if request.method == 'POST':
+        selected_board = Board.objects.get(name=board_name)
+        selected_column = selected_board.column_set.get(name=request.POST.get('column_name', None))
+        selected_task = selected_column.task_set.get(title=request.POST.get('task_title', None))
+        
+        selected_task.delete()
+        
+        columns = selected_board.column_set.all()
+
+        context = {
+                'board': selected_board,
+                'columns': columns,
+                }
+
+        return render(request, 'dashboard/board.html', context)
+    else:
+        return Http404('Not allowed')
 
