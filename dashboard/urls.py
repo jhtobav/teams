@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
     path('board/<str:board_name>', views.board, name='board'),
+    path('board/<str:board_name>/delete_board', views.delete_board, name ='delete_board'),
     path('board/<str:board_name>/create_column', views.create_column, name='create_column'),
     path('board/<str:board_name>/delete_column', views.delete_column, name='delete_column'),
     path('board/<str:board_name>/create_task', views.create_task, name='create_task'),

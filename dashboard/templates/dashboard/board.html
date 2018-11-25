@@ -7,6 +7,12 @@
 <body>
     <h1>Board: {{board.name}}</h1>
     <hr>
+    <form action="" method="post">
+	    {% csrf_token %}
+	    <h4>Delete Board:  </h4>
+	    <button type="submit" formaction="{% url 'delete_board' board.name %}"> Delete </button>
+    </form>
+    <hr>
     <h1>Columns</h1>
     <hr>
     {% if message %}

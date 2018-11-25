@@ -6,6 +6,11 @@
 </head>
 <body>
     <h1>Boards</h1>
+    <hr>
+    {% if message %}
+        {{message}}
+    {% endif %}
+    <hr>
     <form action="" method="post">
         {% for board in boards %}
             {% csrf_token %}
