@@ -5,7 +5,7 @@ from django.utils import timezone
 from .models import Board, Column, Task
 
 
-def dashboard(request):
+def dashboard(request, team_name):
     if request.method == 'GET':
         boards = Board.objects.all()
         context = {'boards': boards}

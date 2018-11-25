@@ -6,6 +6,6 @@ def index(request):
     context = {}
     return render(request, 'welcome/index.html', context)
 
-def go_to_boards(request):
-    return redirect("dashboard")
+def go_to_teams(request):
+    return redirect("teams")
 

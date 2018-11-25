@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Teams</title>
+</head>
+<body>
+    <h1>Teams</h1>
+    <hr>
+    {% if message %}
+        {{message}}
+    {% endif %}
+    <hr>
+    <form action="" method="post">
+        {% for team in teams %}
+            {% csrf_token %}
+            <a href="{% url 'dashboard:dashboard' team.name %}">{{ team.name }}</a>
+            <br>
+        {% endfor %}
+    </form>
+    <hr>
+    <form action="" method="post">
+    	{% csrf_token %}
+	Create a new team:
+	<p>
+    	Name: <input type="text" name="team_name">
+    	<button type="submit" formaction="{% url 'teamsapp:create_team' %}"> Create </button>
+    </form>
+    <hr>
+</body>
+</html>
