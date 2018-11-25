@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['35.237.184.96']
 
 INSTALLED_APPS = [
     'welcome.apps.WelcomeConfig',
+    'teamsapp.apps.TeamsappConfig',
     'dashboard.apps.DashboardConfig',
     'django.contrib.admin',
     'django.contrib.auth',

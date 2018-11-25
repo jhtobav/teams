@@ -1,13 +1,12 @@
 from django.db import models
 from django.utils import timezone
 
-# Create your models here.
-
 
 class Board(models.Model):
+    team = models.ForeignKey('teamsapp.Team', on_delete='cascade')
     name = models.CharField(max_length=50)
     slug = models.SlugField(blank=True, null=True)
-    creation_date = models.DateField(default=timezone.now())
+    creation_date = models.DateField(default=timezone.now)
 
     def __str__(self):
         return self.name
@@ -26,7 +25,7 @@ class Task(models.Model):
     column = models.ForeignKey(Column, on_delete='cascade')
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=280)
-    creation_date = models.DateField(default=timezone.now())
+    creation_date = models.DateField(default=timezone.now)
 
     def __str__(self):
         return "{}-{}-{}".format(self.column.board.name, self.column.name, self.title)
