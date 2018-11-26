@@ -5,8 +5,20 @@
     <title>index</title>
 </head>
 <body>
-    <div>
-    <a href="{% url 'teamsapp:teams' %}">Go to my teams</a>
-    </div>
+    <h1>Teams</h1>
+    <hr>
+    {% if message %}
+        {{message}}
+    {% endif %}
+    <hr>
+    <form action="" method="post">
+        {% csrf_token %}
+        Login:
+        <p>
+        Email: <input type="text" name="email">
+	Password: <input type="password" name="password">
+        <button type="submit"> Login  </button>
+    </form>
 </body>
 </html>
+
