@@ -12,11 +12,10 @@ def index(request):
 
         login_successful, message  = login(email, password)
 
-        context = {'message': message}
-
         if login_successful:
-            return redirect('teamsapp:teams') 
+            return redirect('teamsapp:teams', email=email) 
         else:
+            context = {'message': message}
             return render(request, 'welcome/index.html', context) 
     else:
         return Http404('Not allowed')

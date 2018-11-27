@@ -5,7 +5,7 @@ from . import views
 
 app_name = 'teamsapp'
 urlpatterns = [
-    path('', views.teams, name='teams'),
-    path('create_team', views.create_team, name='create_team')
+    path('<str:email>', views.teams, name='teams'),
+    path('<str:email>/create_team', views.create_team, name='create_team')
 ]
 

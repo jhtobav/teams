@@ -11,9 +11,10 @@ class Team(models.Model):
 
 
 class Member(models.Model):
-    team = models.ForeignKey(Team, on_delete='cascade')
-    user_id = models.CharField(max_length=50)
+    teams = models.ManyToManyField(Team)
+    email = models.CharField(max_length=128)
+    full_name = models.CharField(max_length=128)
 
     def __str__(self):
-        return "{}-{}".format(self.team.name, self.user_id)
+        return "{}-{}".format(self.teams.all(), self.full_name)
 
