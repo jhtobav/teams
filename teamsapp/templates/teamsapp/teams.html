@@ -7,18 +7,28 @@
 <body>
     <h1>Welcome user {{email}}</h1>
     <hr>
-    <h1>Teams</h1>
-    <hr>
+    <h2>Your Teams</h2>
     {% if message %}
+    	<hr>
         {{message}}
+	<hr>
     {% endif %}
-    <hr>
     <form action="" method="post">
-        {% for team in teams %}
-            {% csrf_token %}
-            <a href="{% url 'dashboard:dashboard' team.name %}">{{ team.name }}</a>
+	{% csrf_token %}
+        {% for member_team in member_teams %}
+            <a href="{% url 'dashboard:dashboard' member_team.name %}">{{ member_team.name }}</a>
             <br>
         {% endfor %}
+    </form>
+    <hr>
+    <h2>Select the teams you want to be part of:</h2>
+    <form action="" method="post">
+	{% csrf_token %}    
+        {% for team in all_teams %}
+	    <input type="checkbox" name="{{team.name}}" value"{{team.name}}"> {{ team.name }}
+	    <br>
+        {% endfor %}
+	<button type="submit" formaction="{% url 'teamsapp:update_member_teams' email %}"> Update </button>
     </form>
     <hr>
     <form action="" method="post">
