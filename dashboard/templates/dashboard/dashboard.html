@@ -1,18 +1,21 @@
 <!DOCTYPE html>
+{% extends 'base.html' %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
 </head>
 <body>
+	<main>
+		      {% block content %}
     <h1>Team: {{team.name}}</h1>
     <hr>
-    <h1>Boards</h1>
-    <hr>
+    <h2>Your team boards</h2>
     {% if message %}
+	<hr>
         {{message}}
+	<hr>
     {% endif %}
-    <hr>
     <form action="" method="post">
         {% for board in boards %}
             {% csrf_token %}
@@ -20,6 +23,20 @@
 	    <br> 
         {% endfor %}
     </form>
+    <hr>
+    <h2>Search a Board</h2>
+    <input type="text" name="search_pattern" id="search_pattern">
+    <output type="text" name="output_text" id="output_text">
+    <form action="" method="post">
+	{% csrf_token %}
+	<input typé="text" name="search_pattern" placeholder="Search...">
+	<output type="text" name="output_text" id="output_text">
+	<button type="submit" formaction="{% url 'search:search' team.name %}"> Search </button>
+    </form>
+    Matching Boards:
+    {% for board in search_boards %}
+	{{board.name}}
+    {% endfor %}
     <hr>
     <form action="" method="post">
     	{% csrf_token %}
@@ -29,5 +46,28 @@
 	<button type="submit" formaction="{% url 'dashboard:create_board' team.name %}"> Create </button>
         </form>
     <hr>
+      {% endblock %}
+	</main>
+	   {% block javascript %}
+  <script>
+    $("#search_pattern").keyup(function () {
+      var search_pattern = $(this).val();
+
+      $.ajax({
+        url: '{% url "search:search_engine" %}',
+        data: {
+          'search_pattern': search_pattern
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.is_taken) {
+            alert("A user with this username already exists.");
+          }
+        }
+      });
+
+    });
+  </script>
+    {% endblock %}
 </body>
 </html>

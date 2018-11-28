@@ -21,5 +21,6 @@ urlpatterns = [
     path('teams/', include('welcome.urls')),
     path('teams/app/', include('teamsapp.urls')),
     path('teams/dashboard/', include('dashboard.urls')),
+    path('teams/search/', include('search.urls')),
     path('admin/', admin.site.urls),
 ]

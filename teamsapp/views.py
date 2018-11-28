@@ -1,5 +1,4 @@
-from django.shortcuts import redirect, render, Http404
-from django.utils import timezone
+from django.shortcuts import render, Http404
 
 from .models import Team, Member
 
