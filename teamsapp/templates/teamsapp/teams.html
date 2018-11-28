@@ -1,10 +1,12 @@
-<!DOCTYPE html>
+{% extends 'base.html' %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Teams</title>
 </head>
 <body>
+	        <main>
+                      {% block content %}
     <h1>Welcome user {{email}}</h1>
     <hr>
     <h2>Your Teams</h2>
@@ -21,15 +23,13 @@
         {% endfor %}
     </form>
     <hr>
-    <h2>Select the teams you want to be part of:</h2>
-    <form action="" method="post">
-	{% csrf_token %}    
-        {% for team in all_teams %}
-	    <input type="checkbox" name="{{team.name}}" value"{{team.name}}"> {{ team.name }}
-	    <br>
-        {% endfor %}
-	<button type="submit" formaction="{% url 'teamsapp:update_member_teams' email %}"> Update </button>
-    </form>
+    <h2>Search and select one to team to be part of:</h2>
+        <div id="dropdown" class="dropdown">
+                <input type="text" placeholder="Search.." id="search_pattern">
+          <div id="myDropdown" class="dropdown-content">
+          </div>
+        </div>
+        <br>
     <hr>
     <form action="" method="post">
     	{% csrf_token %}
@@ -39,5 +39,48 @@
     	<button type="submit" formaction="{% url 'teamsapp:create_team' email %}"> Create </button>
     </form>
     <hr>
+          {% endblock %}
+        </main>
+{% block javascript %}
+  <script>
+    $("#search_pattern").keyup(function () {
+      var search_pattern = $(this).val();
+      if (search_pattern != ''){
+      $.ajax({
+        url: '{% url "search:search_teams" %}',
+        data: {
+          'search_pattern': search_pattern,
+        },
+        dataType: 'json',
+        success: function (data) {
+            var i, html; 
+            html = ''
+            console.log(data);
+            for (i=0; i < data['teams'].length; i++){
+                    html += '<a href="/teams/app/' + '{{email}}' + '/update_member_teams/' + data['teams'][i].team_name + '">' + data['teams'][i].team_name + '</a>';
+          }
+                  $("#myDropdown").html(html);
+                $(document).bind("click", clickFunction);
+        }
+
+      });
+        }
+    });
+
+
+    function clickFunction(event) {
+        if(!$(event.target).closest('#dropdown').length) {
+                var a, i;
+                div = document.getElementById("myDropdown");
+                a = div.getElementsByTagName("a");
+                for (i = 0; i < a.length; i++) {
+                        a[i].style.display = "none";
+                }
+                $(document).unbind("click");
+        }
+    };
+
+  </script>
+    {% endblock %}
 </body>
 </html>

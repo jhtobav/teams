@@ -32,9 +32,23 @@ def search_team_boards(request):
             dict = { 'board_name' : board.name }
             items.append(dict)
         data = { 
-            'is_taken': search_pattern == "Project1",
             'boards': items 
             }
         return JsonResponse(data)
  #   else:
   #      raise Http404('Not allowed')
+
+def search_teams(request):
+    if request.method == 'GET':
+        search_pattern = request.GET.get('search_pattern', None)
+        teams = Team.objects.filter(name__icontains=search_pattern)
+        items = []
+        for team in teams:
+            dict = { 'team_name' : team.name }
+            items.append(dict)
+        data = {
+            'teams': items
+            }
+        return JsonResponse(data)
+    else:
+        raise Http404('Not allowed')

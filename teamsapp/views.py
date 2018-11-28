@@ -7,37 +7,35 @@ def teams(request, email):
     if request.method == 'GET':
         member = Member.objects.get(email=email)
         member_teams = member.teams.all() 
-        all_teams = Team.objects.all()
         context = {
                 'email': email,
                 'member_teams': member_teams,
-                'all_teams': all_teams
                 }
         return render(request, 'teamsapp/teams.html', context)
     else:
-        return Http404('Not allowed')
+        raise Http404('Not allowed')
 
 
-def update_member_teams(request, email):
-    if request.method == 'POST':
+def update_member_teams(request, email, team_name):
+    if request.method == 'GET':
         member = Member.objects.get(email=email)
         all_teams = Team.objects.all()
 
         for team in all_teams:
-            if request.POST.get(team.name, None):
+            if team.name == team_name:
                 member.teams.add(team)
+                break
         
         member_teams = member.teams.all()
        
         context = {
                 'email': email,
                 'member_teams': member_teams,
-                'all_teams': all_teams
                 }
 
         return render(request, 'teamsapp/teams.html', context)
     else:
-        return Http404('Not allowed')
+        raise Http404('Not allowed')
 
 
 def create_team(request, email):
@@ -48,19 +46,16 @@ def create_team(request, email):
         team.save()
 
         member = Member.objects.get(email=email)
-
-        team.member_set.add(member)
-
         member_teams = member.teams.all()
-        all_teams = Team.objects.all()
 
+        message = "Team created, please use the search feature and asign yourself to the team"
         context = {
+                'message': message,
                 'email': email,
                 'member_teams': member_teams,
-                'all_teams': all_teams
                 }
 
         return render(request, 'teamsapp/teams.html', context)
     else:
-        return Http404('Not allowed')
+        raise Http404('Not allowed')
 
