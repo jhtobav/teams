@@ -5,7 +5,7 @@ from . import views
 
 app_name = 'search'
 urlpatterns = [
-    path('/<str:team_name>', views.search, name='search'),
-    path(r'^ajax/validate_username/$' , views.search_engine, name='search_engine')
+    path('<str:team_name>', views.search, name='search'),
+    path('search_team_boards/', views.search_team_boards, name='search_team_boards')
 ]
 

@@ -16,27 +16,13 @@
         {{message}}
 	<hr>
     {% endif %}
-    <form action="" method="post">
-        {% for board in boards %}
-            {% csrf_token %}
-	    <a href="{% url 'dashboard:board' team.name board.name %}">{{ board.name }}</a>
-	    <br> 
-        {% endfor %}
-    </form>
-    <hr>
-    <h2>Search a Board</h2>
-    <input type="text" name="search_pattern" id="search_pattern">
-    <output type="text" name="output_text" id="output_text">
-    <form action="" method="post">
-	{% csrf_token %}
-	<input typé="text" name="search_pattern" placeholder="Search...">
-	<output type="text" name="output_text" id="output_text">
-	<button type="submit" formaction="{% url 'search:search' team.name %}"> Search </button>
-    </form>
-    Matching Boards:
-    {% for board in search_boards %}
-	{{board.name}}
-    {% endfor %}
+    <h2>Search and select one of your teams boards.</h2>
+	<div id="dropdown" class="dropdown">
+		<input type="text" placeholder="Search.." id="search_pattern">
+	  <div id="myDropdown" class="dropdown-content">
+	  </div>
+	</div>
+	<br>
     <hr>
     <form action="" method="post">
     	{% csrf_token %}
@@ -52,21 +38,42 @@
   <script>
     $("#search_pattern").keyup(function () {
       var search_pattern = $(this).val();
-
+      if (search_pattern != ''){
       $.ajax({
-        url: '{% url "search:search_engine" %}',
+        url: '{% url "search:search_team_boards" %}',
         data: {
-          'search_pattern': search_pattern
+          'search_pattern': search_pattern,
+	  'team_name': '{{team.name}}'
         },
         dataType: 'json',
         success: function (data) {
-          if (data.is_taken) {
-            alert("A user with this username already exists.");
+	    var i, html, team_name;
+	    html = ''
+	    console.log(data);
+	    for (i=0; i < data['boards'].length; i++){
+		    html += '<a href="/teams/dashboard/' + '{{team.name}}' + '/board/' + data['boards'][i].board_name + '">' + data['boards'][i].board_name + '</a>';
           }
-        }
+		  $("#myDropdown").html(html);
+		$(document).bind("click", clickFunction);
+	}
+        
       });
-
+	}
     });
+
+
+    function clickFunction(event) {
+	if(!$(event.target).closest('#dropdown').length) {
+		var a, i;
+		div = document.getElementById("myDropdown");
+		a = div.getElementsByTagName("a");
+		for (i = 0; i < a.length; i++) {
+			a[i].style.display = "none";
+		}
+		$(document).unbind("click");
+	}
+    };
+	
   </script>
     {% endblock %}
 </body>

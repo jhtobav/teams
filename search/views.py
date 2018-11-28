@@ -19,9 +19,22 @@ def search(request, team_name):
                 }
         return render(request, 'dashboard/dashboard.html', context)
     else:
-        return Http404('Not allowed')
+        raise Http404('Not allowed')
 
-def search_engine(request):
-    search_pattern = request.GET.get('search_pattern', None)
-    data = { 'is_taken': search_pattern == "hello"  }
-    return JsonResponse(data)
+def search_team_boards(request):
+#    if request.method == 'GET':
+        search_pattern = request.GET.get('search_pattern', None)
+        team_name = request.GET.get('team_name', None)
+        selected_team = Team.objects.get(name=team_name)
+        boards = selected_team.board_set.filter(slug__icontains=search_pattern)
+        items = [] 
+        for board in boards:
+            dict = { 'board_name' : board.name }
+            items.append(dict)
+        data = { 
+            'is_taken': search_pattern == "Project1",
+            'boards': items 
+            }
+        return JsonResponse(data)
+ #   else:
+  #      raise Http404('Not allowed')
