@@ -1,16 +1,22 @@
 from django.shortcuts import render, Http404
+from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Team, Member
 
 
-def teams(request, email):
+def teams(request, email, full_name):
     if request.method == 'GET':
-        member = Member.objects.get(email=email)
+        try: 
+            member = Member.objects.get(email=email)
+        except ObjectDoesNotExist:
+            member = Member(email=email, full_name=full_name)
+            member.save()
+
         member_teams = member.teams.all() 
         context = {
-                'email': email,
-                'member_teams': member_teams,
-                }
+            'email': email,
+            'member_teams': member_teams,
+            }
         return render(request, 'teamsapp/teams.html', context)
     else:
         raise Http404('Not allowed')
