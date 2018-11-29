@@ -6,6 +6,9 @@ from teamsapp.models import Team
 
 
 def dashboard(request, team_name):
+    """
+        Lists the boards of a given team
+    """
     if request.method == 'GET':
         selected_team = Team.objects.get(name=team_name)
         boards = selected_team.board_set.all()
@@ -19,6 +22,9 @@ def dashboard(request, team_name):
 
 
 def create_board(request, team_name):
+    """
+        Creates a board for a team
+    """
     if request.method == 'POST':
         selected_team = Team.objects.get(name=team_name)
         board_name = request.POST.get('new_board_name', None)
@@ -37,6 +43,9 @@ def create_board(request, team_name):
 
 
 def board(request, team_name, board_name):
+    """
+        Shows a board, its columns ands tasks
+    """
     if request.method == 'GET':
         selected_team = Team.objects.get(name=team_name)
         selected_board = selected_team.board_set.get(name=board_name)
@@ -52,6 +61,9 @@ def board(request, team_name, board_name):
 
 
 def delete_board(request, team_name, board_name):
+    """
+        Deletes a selected board, validates it it doesn't have columns
+    """
     if request.method == 'POST':
         selected_team = Team.objects.get(name=team_name)
         selected_board = selected_team.board_set.get(name=board_name)
@@ -82,6 +94,9 @@ def delete_board(request, team_name, board_name):
 
 
 def create_column(request, team_name, board_name):
+    """
+        Creates a column inside the board
+    """
     if request.method == 'POST':
         selected_team = Team.objects.get(name=team_name)
         selected_board = selected_team.board_set.get(name=board_name)
@@ -103,6 +118,9 @@ def create_column(request, team_name, board_name):
 
 
 def delete_column(request, team_name, board_name):
+    """
+        Deletes a column of the given board, validates if it doesn't have tasks
+    """
     if request.method == 'POST':
         selected_team = Team.objects.get(name=team_name)
         selected_board = selected_team.board_set.get(name=board_name)
@@ -133,6 +151,9 @@ def delete_column(request, team_name, board_name):
 
 
 def create_task(request, team_name, board_name):
+    """
+        Creates a task inside a column
+    """
     if request.method == 'POST':
         selected_team = Team.objects.get(name=team_name)
         selected_board = selected_team.board_set.get(name=board_name)
@@ -155,6 +176,9 @@ def create_task(request, team_name, board_name):
 
 
 def delete_task(request, team_name, board_name):
+    """
+        Deletes a task
+    """
     if request.method == 'POST':
         selected_team = Team.objects.get(name=team_name)
         selected_board = selected_team.board_set.get(name=board_name)

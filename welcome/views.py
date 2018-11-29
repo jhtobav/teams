@@ -4,6 +4,9 @@ from django.http import Http404
 
 
 def index(request):
+    """
+        Renders the index page of the teams app
+    """
     if request.method == 'GET':
         return render(request, 'welcome/index.html', {})
     elif request.method == 'POST':
@@ -22,16 +25,20 @@ def index(request):
 
 
 def login(email, password):
+    """
+        Calls the flask authentication micro-service
+    """
     full_name = ''
     try:
-        response = requests.get("http://104.155.231.4:5000/authentication/", params={'email': email, 'password': password})
+        response = requests.get("http://104.155.231.4:5000/authentication/",
+                                params={'email': email, 'password': password})
         
     except requests.exceptions.ConnectionError:
         message = "System unavailable"
         return False, message, email, full_name
     else:
         if response.status_code == 200:
-            message = "Login succesfull"
+            message = "Login successful"
             response = response.json()            
             email = response.get('data', {}).get('email')
             full_name = response.get('data', {}).get('full_name')

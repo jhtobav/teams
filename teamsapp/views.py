@@ -5,7 +5,11 @@ from .models import Team, Member
 
 
 def teams(request, email, full_name):
+    """
+        Lists the member teams.
+    """
     if request.method == 'GET':
+        # Validates if the member exists. If members logon successfully they are created on the teams-app.
         try: 
             member = Member.objects.get(email=email)
         except ObjectDoesNotExist:
@@ -23,6 +27,9 @@ def teams(request, email, full_name):
 
 
 def update_member_teams(request, email, team_name):
+    """
+        Adds a selected team to the member teams list.
+    """
     if request.method == 'GET':
         member = Member.objects.get(email=email)
         all_teams = Team.objects.all()
@@ -45,6 +52,9 @@ def update_member_teams(request, email, team_name):
 
 
 def create_team(request, email):
+    """
+        Creates a team. It doesn't relates member and teams, so users have to use the really cool search feature.
+    """
     if request.method == 'POST':
         team_name = request.POST.get('team_name', None)
 
@@ -54,7 +64,7 @@ def create_team(request, email):
         member = Member.objects.get(email=email)
         member_teams = member.teams.all()
 
-        message = "Team created, please use the search feature and asign yourself to the team"
+        message = "Team created, please use the search feature and assign yourself to the team"
         context = {
                 'message': message,
                 'email': email,
