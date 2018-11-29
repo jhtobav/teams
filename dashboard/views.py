@@ -1,8 +1,7 @@
-
-from django.shortcuts import redirect, render, Http404
+from django.shortcuts import render, Http404
 from django.utils import timezone
 
-from .models import Board, Column, Task
+from .models import Board
 from teamsapp.models import Team
 
 
@@ -35,6 +34,7 @@ def create_board(request, team_name):
         return render(request, 'dashboard/dashboard.html', context)
     else:
         return Http404('Not allowed')
+
 
 def board(request, team_name, board_name):
     if request.method == 'GET':
@@ -100,6 +100,7 @@ def create_column(request, team_name, board_name):
         return render(request, 'dashboard/board.html', context)
     else:
         return Http404('Not allowed')
+
 
 def delete_column(request, team_name, board_name):
     if request.method == 'POST':

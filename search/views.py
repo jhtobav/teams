@@ -21,6 +21,7 @@ def search(request, team_name):
     else:
         raise Http404('Not allowed')
 
+
 def search_team_boards(request):
 #    if request.method == 'GET':
         search_pattern = request.GET.get('search_pattern', None)
@@ -37,6 +38,7 @@ def search_team_boards(request):
         return JsonResponse(data)
  #   else:
   #      raise Http404('Not allowed')
+
 
 def search_teams(request):
     if request.method == 'GET':

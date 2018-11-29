@@ -6,74 +6,74 @@
 </head>
 <body>
 	<main>
-		      {% block content %}
-    <h1>Team: {{team.name}}</h1>
-    <hr>
-    <h2>Your team boards</h2>
-    {% if message %}
-	<hr>
-        {{message}}
-	<hr>
-    {% endif %}
-    <h2>Search and select one of your teams boards.</h2>
-	<div id="dropdown" class="dropdown">
-		<input type="text" placeholder="Search.." id="search_pattern">
-	  <div id="myDropdown" class="dropdown-content">
-	  </div>
-	</div>
-	<br>
-    <hr>
-    <form action="" method="post">
-    	{% csrf_token %}
-    	Create a new board:
-        <p>
-        Name: <input type="text" name="new_board_name">
-	<button type="submit" formaction="{% url 'dashboard:create_board' team.name %}"> Create </button>
-        </form>
-    <hr>
-      {% endblock %}
+	    {% block content %}
+            <h1>Team: {{team.name}}</h1>
+            <hr>
+            <h2>Your team boards</h2>
+            {% if message %}
+    	        <hr>
+                {{message}}
+    	        <hr>
+            {% endif %}
+            <h2>Search and select one of your teams boards.</h2>
+    	    <div id="dropdown" class="dropdown">
+        		<input type="text" placeholder="Search.." id="search_pattern">
+        	  <div id="myDropdown" class="dropdown-content">
+        	  </div>
+        	</div>
+    	    <br>
+            <hr>
+            <form action="" method="post">
+        	    {% csrf_token %}
+        	    Create a new board:
+                <p>
+                Name: <input type="text" name="new_board_name">
+    	        <button type="submit" formaction="{% url 'dashboard:create_board' team.name %}"> Create </button>
+            </form>
+            <hr>
+        {% endblock %}
 	</main>
-	   {% block javascript %}
-  <script>
-    $("#search_pattern").keyup(function () {
-      var search_pattern = $(this).val();
-      if (search_pattern != ''){
-      $.ajax({
-        url: '{% url "search:search_team_boards" %}',
-        data: {
-          'search_pattern': search_pattern,
-	  'team_name': '{{team.name}}'
-        },
-        dataType: 'json',
-        success: function (data) {
-	    var i, html, team_name;
-	    html = ''
-	    console.log(data);
-	    for (i=0; i < data['boards'].length; i++){
-		    html += '<a href="/teams/dashboard/' + '{{team.name}}' + '/board/' + data['boards'][i].board_name + '">' + data['boards'][i].board_name + '</a>';
-          }
-		  $("#myDropdown").html(html);
-		$(document).bind("click", clickFunction);
-	}
-        
-      });
-	}
-    });
+	{% block javascript %}
+        <script>
+            $("#search_pattern").keyup(function () {
+                var search_pattern = $(this).val();
+                if (search_pattern != ''){
+                    $.ajax({
+                        url: '{% url "search:search_team_boards" %}',
+                        data: {
+                            'search_pattern': search_pattern,
+                            'team_name': '{{team.name}}'
+                            },
+                        dataType: 'json',
+                        success: function (data) {
+                            var i, html, team_name;
+                            html = ''
+                            console.log(data);
+                            for (i=0; i < data['boards'].length; i++){
+                                html += '<a href="/teams/dashboard/' + '{{team.name}}' + '/board/'
+                                + data['boards'][i].board_name + '">' + data['boards'][i].board_name + '</a>';
+                            }
+                            $("#myDropdown").html(html);
+                            $(document).bind("click", clickFunction);
+                        }
+
+                    });
+                }
+            });
 
 
-    function clickFunction(event) {
-	if(!$(event.target).closest('#dropdown').length) {
-		var a, i;
-		div = document.getElementById("myDropdown");
-		a = div.getElementsByTagName("a");
-		for (i = 0; i < a.length; i++) {
-			a[i].style.display = "none";
-		}
-		$(document).unbind("click");
-	}
-    };
-	
-  </script>
+            function clickFunction(event) {
+                if(!$(event.target).closest('#dropdown').length) {
+                    var a, i;
+                    div = document.getElementById("myDropdown");
+                    a = div.getElementsByTagName("a");
+                    for (i = 0; i < a.length; i++) {
+                        a[i].style.display = "none";
+                    }
+                    $(document).unbind("click");
+                }
+            };
+        </script>
     {% endblock %}
 </body>
 </html>
