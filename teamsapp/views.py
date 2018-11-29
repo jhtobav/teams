@@ -1,3 +1,4 @@
+# teamsapp/views.py
 from django.shortcuts import render, Http404
 from django.core.exceptions import ObjectDoesNotExist
 

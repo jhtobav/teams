@@ -1,3 +1,4 @@
+# dashboard/views.py
 from django.shortcuts import render, Http404
 from django.utils import timezone
 

@@ -1,3 +1,4 @@
+# search/views.py
 from django.shortcuts import render, Http404
 from django.http import JsonResponse
 

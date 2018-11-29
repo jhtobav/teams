@@ -1,3 +1,4 @@
+# welcome/views.py
 import requests
 from django.shortcuts import redirect, render
 from django.http import Http404
@@ -5,7 +6,7 @@ from django.http import Http404
 
 def index(request):
     """
-        Renders the index page of the teams app
+       Renders the index page of the teams app
     """
     if request.method == 'GET':
         return render(request, 'welcome/index.html', {})
