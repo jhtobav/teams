@@ -10,12 +10,19 @@
             <h1>Team: {{team.name}}</h1>
             <hr>
             <h2>Your team boards</h2>
+            <form action="" method="post">
+		{% for board in boards %}
+		    {% csrf_token %}
+		    <a href="{% url 'dashboard:board' team.name board.name %}">{{ board.name }}</a>
+		    <br>
+		{% endfor %}
+	    </form>
             {% if message %}
     	        <hr>
                 {{message}}
     	        <hr>
             {% endif %}
-            <h2>Search and select one of your teams boards.</h2>
+            <h2>Or use the cool search feature and select one of your teams boards.</h2>
     	    <div id="dropdown" class="dropdown">
         		<input type="text" placeholder="Search.." id="search_pattern">
         	  <div id="myDropdown" class="dropdown-content">

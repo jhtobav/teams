@@ -33,9 +33,11 @@ def create_board(request, team_name):
         
         selected_team.board_set.create(name=board_name, slug=slug)
         boards = selected_team.board_set.all()
+        message = "Board created successfully"
         context = {
                 'team': selected_team,
-                'boards': boards
+                'boards': boards,
+                'message': message
                 }
         
         return render(request, 'dashboard/dashboard.html', context)
@@ -68,7 +70,7 @@ def delete_board(request, team_name, board_name):
     if request.method == 'POST':
         selected_team = Team.objects.get(name=team_name)
         selected_board = selected_team.board_set.get(name=board_name)
-        if len(selected_board.column_set.all()) < 1:
+        if selected_board.column_set.count() < 1:
             selected_board.delete()
             boards = Board.objects.all()
             message = "Board deleted successfully"
@@ -81,7 +83,7 @@ def delete_board(request, team_name, board_name):
             return render(request, 'dashboard/dashboard.html', context) 
         else:
             message = "The board still has columns, it can not be deleted"
-            columns = selected_board.column_set.all()
+            columns =  selected_board.column_set.order_by('index')
 
             context = {
                     'message': message,
@@ -102,10 +104,10 @@ def create_column(request, team_name, board_name):
         selected_team = Team.objects.get(name=team_name)
         selected_board = selected_team.board_set.get(name=board_name)
         column_name = request.POST.get('new_column_name', None)
-        column_index = len(selected_board.column_set.all())
+        column_index = selected_board.column_set.count()
         selected_board.column_set.create(name=column_name, index=column_index)
 
-        columns = selected_board.column_set.all()
+        columns = selected_board.column_set.order_by('index')
 
         context = {
                 'team': selected_team,
@@ -125,10 +127,10 @@ def delete_column(request, team_name, board_name):
         selected_team = Team.objects.get(name=team_name)
         selected_board = selected_team.board_set.get(name=board_name)
         selected_column = selected_board.column_set.get(name=request.POST.get('column_name', None))
-        if len(selected_column.task_set.all()) < 1:
+        if selected_column.task_set.count() < 1:
             selected_column.delete()
 
-            columns = selected_board.column_set.all()
+            columns = selected_board.column_set.order_by('index')
             context = {
                     'team': selected_team,
                     'board': selected_board,
@@ -137,7 +139,7 @@ def delete_column(request, team_name, board_name):
             return render(request, 'dashboard/board.html', context)
         else:
             message = "The column still has tasks, it can not be deleted"
-            columns = selected_board.column_set.all()
+            columns = selected_board.column_set.order_by('index')
 
             context = {
                     'team': selected_team,
@@ -163,13 +165,75 @@ def create_task(request, team_name, board_name):
         
         selected_column.task_set.create(title=task_title, description=task_description, creation_date = timezone.now())
 
-        columns = selected_board.column_set.all()
+        columns = selected_board.column_set.order_by('index')
         
         context = {
                 'team': selected_team,
                 'board': selected_board,
                 'columns': columns
                 }
+        return render(request, 'dashboard/board.html', context)
+    else:
+        return Http404('Not allowed')
+
+
+def move_task_right(request, team_name, board_name):
+    """
+        Moves the task to the next column to the right
+    """
+    if request.method == 'POST':
+        selected_team = Team.objects.get(name=team_name)
+        selected_board = selected_team.board_set.get(name=board_name)
+        selected_column = selected_board.column_set.get(name=request.POST.get('column_name', None))
+        selected_task = selected_column.task_set.get(title=request.POST.get('task_title', None))
+        current_index = selected_column.index
+
+        if not current_index == selected_board.column_set.count()-1:
+            selected_board.column_set.get(index=current_index+1).task_set.add(selected_task)
+            message = "Task moved successfully"
+        else:
+            message = "There is not columns to the right, the task can't be moved"
+
+        columns = selected_board.column_set.order_by('index')
+
+        context = {
+                'team': selected_team,
+                'board': selected_board,
+                'columns': columns,
+                'message': message
+                }
+
+        return render(request, 'dashboard/board.html', context)
+    else:
+        return Http404('Not allowed')
+
+
+def move_task_left(request, team_name, board_name):
+    """
+        Moves the task to the next column to the left
+    """
+    if request.method == 'POST':
+        selected_team = Team.objects.get(name=team_name)
+        selected_board = selected_team.board_set.get(name=board_name)
+        selected_column = selected_board.column_set.get(name=request.POST.get('column_name', None))
+        selected_task = selected_column.task_set.get(title=request.POST.get('task_title', None))
+        current_index = selected_column.index
+
+        if not current_index == 0:
+            selected_board.column_set.get(index=current_index-1).task_set.add(selected_task)
+            message = "Task moved successfully"
+        else:
+            message = "There is not columns to the left, the task can't be moved"
+
+        columns = selected_board.column_set.order_by('index')
+        
+        context = {
+                'team': selected_team,
+                'board': selected_board,
+                'columns': columns,
+                'message': message
+                }
+
         return render(request, 'dashboard/board.html', context)
     else:
         return Http404('Not allowed')
@@ -187,7 +251,7 @@ def delete_task(request, team_name, board_name):
         
         selected_task.delete()
         
-        columns = selected_board.column_set.all()
+        columns = selected_board.column_set.order_by('index')
 
         context = {
                 'team': selected_team,

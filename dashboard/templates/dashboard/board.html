@@ -34,11 +34,11 @@
 					{% csrf_token %}
 					<h4>Task: {{task.title}}</h4>
 					<h5>--- {{task.description}}</h5>
-                                        <button type="submit" formaction="{% url 'dashboard:delete_task' team.name board.name %}">
+                                        <button type="submit" formaction="{% url 'dashboard:move_task_left' team.name board.name %}">
 						&lt;&lt;&lt;  Move Left </button>
-                                        <button type="submit" formaction="{% url 'dashboard:delete_task' team.name board.name %}">
+                                        <button type="submit" formaction="{% url 'dashboard:move_task_right' team.name board.name %}">
                                                 Move Right &gt;&gt;&gt; </button>
-					<button type="submit" formaction="{% url 'dashboard:delete_task' team.name board.name %}">
+					<button type="submit" formaction="{% url 'dashboard:delete_task'  team.name board.name %}">
 						Delete </button>
 				</form>
 				</div>

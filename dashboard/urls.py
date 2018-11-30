@@ -13,6 +13,7 @@ urlpatterns = [
     path('<str:team_name>/board/<str:board_name>/create_column', views.create_column, name='create_column'),
     path('<str:team_name>/board/<str:board_name>/delete_column', views.delete_column, name='delete_column'),
     path('<str:team_name>/board/<str:board_name>/create_task', views.create_task, name='create_task'),
+    path('<str:team_name>/board/<str:board_name>/move_task_right', views.move_task_right, name='move_task_right'),
+    path('<str:team_name>/board/<str:board_name>/move_task_left', views.move_task_left, name='move_task_left'),
     path('<str:team_name>/board/<str:board_name>/delete_task', views.delete_task, name='delete_task')
-
 ]
