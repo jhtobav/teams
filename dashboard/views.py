@@ -50,7 +50,7 @@ def board(request, team_name, board_name):
     if request.method == 'GET':
         selected_team = Team.objects.get(name=team_name)
         selected_board = selected_team.board_set.get(name=board_name)
-        columns = selected_board.column_set.all()
+        columns = selected_board.column_set.order_by('index')
         context = {
             'team': selected_team,
             'board': selected_board,
@@ -102,8 +102,7 @@ def create_column(request, team_name, board_name):
         selected_team = Team.objects.get(name=team_name)
         selected_board = selected_team.board_set.get(name=board_name)
         column_name = request.POST.get('new_column_name', None)
-        column_index = request.POST.get('new_column_index', None)
-        
+        column_index = len(selected_board.column_set.all())
         selected_board.column_set.create(name=column_name, index=column_index)
 
         columns = selected_board.column_set.all()

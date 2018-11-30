@@ -34,6 +34,10 @@
 					{% csrf_token %}
 					<h4>Task: {{task.title}}</h4>
 					<h5>--- {{task.description}}</h5>
+                                        <button type="submit" formaction="{% url 'dashboard:delete_task' team.name board.name %}">
+						&lt;&lt;&lt;  Move Left </button>
+                                        <button type="submit" formaction="{% url 'dashboard:delete_task' team.name board.name %}">
+                                                Move Right &gt;&gt;&gt; </button>
 					<button type="submit" formaction="{% url 'dashboard:delete_task' team.name board.name %}">
 						Delete </button>
 				</form>
@@ -68,7 +72,6 @@
 		Create a new column:
 		<p>
 		Name: <input type="text" name="new_column_name">
-		Index: <input type="text" name="new_column_index">
 		<button type="submit" formaction="{% url 'dashboard:create_column' team.name board.name %}"> Create </button>
 	</form>
 	<hr>
