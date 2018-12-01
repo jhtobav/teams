@@ -8,7 +8,15 @@
 	<h1>Team: {{team.name}}</h1>
 	<hr>
 	<h1>Board: {{board.name}}</h1>
-	<hr>
+	{% if messages %}
+	    <hr>
+	    <ul class="messages">
+	    {% for message in messages %}
+		<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+	    {% endfor %}
+	    </ul>
+	    <hr>
+	{% endif %}
 	<form action="" method="post">
 		{% csrf_token %}
 		<h4>Delete Board:  </h4>
