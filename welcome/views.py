@@ -19,8 +19,7 @@ def index(request):
         if login_successful:
             return redirect('teamsapp:teams', email=email, full_name=full_name) 
         else:
-            context = {'message': message}
-            return render(request, 'welcome/index.html', context) 
+            return redirect('welcome:index') 
     else:
         return Http404('Not allowed')
 
