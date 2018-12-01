@@ -6,9 +6,13 @@
 </head>
 <body>
     <h1>The Teams App</h1>
-    {% if message %}
+    {% if messages %}
     	<hr>
-        {{message}}
+	<ul class="messages">
+	    {% for message in messages %}
+	    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+	    {% endfor %}
+	</ul>
 	<hr>
     {% endif %}
     <form action="" method="post">

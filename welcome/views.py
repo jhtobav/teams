@@ -2,6 +2,7 @@
 import requests
 from django.shortcuts import redirect, render
 from django.http import Http404
+from django.contrib import messages
 
 
 def index(request):
@@ -17,8 +18,10 @@ def index(request):
         login_successful, message, email, full_name = login(email, password)
 
         if login_successful:
+            messages.add_message(request, messages.INFO, message)
             return redirect('teamsapp:teams', email=email, full_name=full_name) 
         else:
+            messages.add_message(request, messages.INFO, message)
             return redirect('welcome:index') 
     else:
         return Http404('Not allowed')
@@ -38,8 +41,8 @@ def login(email, password):
         return False, message, email, full_name
     else:
         if response.status_code == 200:
-            message = "Login successful"
             response = response.json()            
+            message = "Login successful"
             email = response.get('data', {}).get('email')
             full_name = response.get('data', {}).get('full_name')
             return True, message, email, full_name
