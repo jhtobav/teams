@@ -7,14 +7,18 @@
 <body>
     <main>
         {% block content %}
-            <h1>Welcome user {{email}}</h1>
+	    <h1> Welcome user {{full_name}} -- {{email}}</h1>
             <hr>
             <h2>Your Teams</h2>
-            {% if message %}
-                <hr>
-                {{message}}
-                <hr>
-            {% endif %}
+	    {% if messages %}
+		<hr>
+		<ul class="messages">
+		{% for message in messages %}
+		    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+		{% endfor %}
+		</ul>
+		<hr>
+	    {% endif %}
             <form action="" method="post">
                 {% csrf_token %}
                 {% for member_team in member_teams %}

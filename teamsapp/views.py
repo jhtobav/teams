@@ -1,6 +1,7 @@
 # teamsapp/views.py
-from django.shortcuts import render, Http404
+from django.shortcuts import render, redirect, Http404
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages
 
 from .models import Team, Member
 
@@ -20,7 +21,8 @@ def teams(request, email, full_name):
         member_teams = member.teams.all() 
         context = {
             'email': email,
-            'member_teams': member_teams,
+            'full_name': full_name,
+            'member_teams': member_teams
             }
         return render(request, 'teamsapp/teams.html', context)
     else:
@@ -39,15 +41,10 @@ def update_member_teams(request, email, team_name):
             if team.name == team_name:
                 member.teams.add(team)
                 break
-        
-        member_teams = member.teams.all()
-       
-        context = {
-                'email': email,
-                'member_teams': member_teams,
-                }
 
-        return render(request, 'teamsapp/teams.html', context)
+        message = 'Member teams updated succesffully'
+        messages.add_message(request, messages.INFO, message)
+        return redirect('teamsapp:teams', email=email, full_name=member.full_name)
     else:
         raise Http404('Not allowed')
 
@@ -58,21 +55,14 @@ def create_team(request, email):
     """
     if request.method == 'POST':
         team_name = request.POST.get('team_name', None)
-
         team = Team(name=team_name)
         team.save()
 
         member = Member.objects.get(email=email)
-        member_teams = member.teams.all()
 
-        message = "Team created, please use the search feature and assign yourself to the team"
-        context = {
-                'message': message,
-                'email': email,
-                'member_teams': member_teams,
-                }
-
-        return render(request, 'teamsapp/teams.html', context)
+        message = "Team created, please use the cool search feature and assign yourself to the team"
+        messages.add_message(request, messages.INFO, message)
+        return redirect('teamsapp:teams', email=email, full_name=member.full_name)
     else:
         raise Http404('Not allowed')
 
