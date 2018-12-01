@@ -7,25 +7,23 @@
 <body>
     <main>
         {% block content %}
+            <a href="{% url 'welcome:index' %}">Go Back</a>
 	    <h1> Welcome user {{full_name}} -- {{email}}</h1>
-            <hr>
-            <h2>Your Teams</h2>
-	    {% if messages %}
-		<hr>
-		<ul class="messages">
-		{% for message in messages %}
-		    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-		{% endfor %}
-		</ul>
-		<hr>
-	    {% endif %}
-            <form action="" method="post">
-                {% csrf_token %}
-                {% for member_team in member_teams %}
-                    <a href="{% url 'dashboard:dashboard' member_team.name %}">{{ member_team.name }}</a>
-                    <br>
-                {% endfor %}
+            <h2>Your Teams:</h2>
+            {% for member_team in member_teams %}
+                <a href="{% url 'dashboard:dashboard' email full_name member_team.name %}">{{ member_team.name }}</a>
+                <br>
+            {% endfor %}
             </form>
+            {% if messages %}
+                <hr>
+                <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+                </ul>
+                <hr>
+            {% endif %}
 	    <hr>
             <h2>Use the cool search feature and select other team to be part of:</h2>
             <div id="dropdown" class="dropdown">
