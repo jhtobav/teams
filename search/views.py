@@ -6,23 +6,6 @@ from dashboard.models import Board
 from teamsapp.models import Team
 
 
-def search(request, team_name):
-    if request.method == 'POST':
-        selected_team = Team.objects.get(name=team_name)
-        boards = selected_team.board_set.all()
-
-        search_boards = Board.objects.filter(slug__icontains=request.POST.get('search_pattern', None))
-
-        context = {
-                'team': selected_team,
-                'boards': boards,
-                'search_boards': search_boards
-                }
-        return render(request, 'dashboard/dashboard.html', context)
-    else:
-        raise Http404('Not allowed')
-
-
 def search_team_boards(request):
     """
         Search boards on a team given a search pattern

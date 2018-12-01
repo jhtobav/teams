@@ -3,6 +3,7 @@ from django.shortcuts import redirect, render
 from django.http import Http404
 from django.contrib import messages
 from django.utils import timezone
+from django.utils.text import slugify
 
 from .models import Board
 from teamsapp.models import Team
@@ -36,7 +37,7 @@ def create_board(request, team_name):
 
         message = "Board created successfully"
         messages.add_message(request, messages.INFO, message)
-        return redirect('dashboard:dashboard.html', team_name=team_name)
+        return redirect('dashboard:dashboard', team_name=team_name)
     else:
         return Http404('Not allowed')
 
