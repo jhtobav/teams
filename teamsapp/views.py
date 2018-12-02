@@ -6,12 +6,14 @@ from django.contrib import messages
 from .models import Team, Member
 
 
-def teams(request, email, full_name):
+def teams(request):
     """
         Lists the member teams.
     """
     if request.method == 'GET':
         # Validates if the member exists. If members logon successfully they are created on the teams-app.
+        email = request.session.get('email', None)
+        full_name = request.session.get('full_name', None)
         try: 
             member = Member.objects.get(email=email)
         except ObjectDoesNotExist:
@@ -29,11 +31,12 @@ def teams(request, email, full_name):
         raise Http404('Not allowed')
 
 
-def update_member_teams(request, email, team_name):
+def update_member_teams(request, team_name):
     """
         Adds a selected team to the member teams list.
     """
     if request.method == 'GET':
+        email = request.session.get('email', None)
         member = Member.objects.get(email=email)
         all_teams = Team.objects.all()
 
@@ -44,25 +47,24 @@ def update_member_teams(request, email, team_name):
 
         message = 'Member teams updated succesffully'
         messages.add_message(request, messages.INFO, message)
-        return redirect('teamsapp:teams', email=email, full_name=member.full_name)
+        return redirect('teamsapp:teams')
     else:
         raise Http404('Not allowed')
 
 
-def create_team(request, email):
+def create_team(request):
     """
         Creates a team. It doesn't relates member and teams, so users have to use the really cool search feature.
     """
     if request.method == 'POST':
+        email = request.session.get('email', None)
         team_name = request.POST.get('team_name', None)
         team = Team(name=team_name)
         team.save()
 
-        member = Member.objects.get(email=email)
-
         message = "Team created, please use the cool search feature and assign yourself to the team"
         messages.add_message(request, messages.INFO, message)
-        return redirect('teamsapp:teams', email=email, full_name=member.full_name)
+        return redirect('teamsapp:teams')
     else:
         raise Http404('Not allowed')
 

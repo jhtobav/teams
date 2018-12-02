@@ -18,8 +18,10 @@ def index(request):
         login_successful, message, email, full_name = login(email, password)
 
         if login_successful:
+            request.session['email'] = email
+            request.session['full_name'] = full_name
             messages.add_message(request, messages.INFO, message)
-            return redirect('teamsapp:teams', email=email, full_name=full_name) 
+            return redirect('teamsapp:teams') 
         else:
             messages.add_message(request, messages.INFO, message)
             return redirect('welcome:index') 

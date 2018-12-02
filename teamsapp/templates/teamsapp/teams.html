@@ -11,7 +11,7 @@
 	    <h1> Welcome user {{full_name}} -- {{email}}</h1>
             <h2>Your Teams:</h2>
             {% for member_team in member_teams %}
-                <a href="{% url 'dashboard:dashboard' email full_name member_team.name %}">{{ member_team.name }}</a>
+                <a href="{% url 'dashboard:dashboard' member_team.name %}">{{ member_team.name }}</a>
                 <br>
             {% endfor %}
             </form>
@@ -38,7 +38,7 @@
                 Create a new team:
                 <p>
                 Name: <input type="text" name="team_name">
-                <button type="submit" formaction="{% url 'teamsapp:create_team' email %}"> Create </button>
+                <button type="submit" formaction="{% url 'teamsapp:create_team' %}"> Create </button>
             </form>
             <hr>
         {% endblock %}
@@ -59,8 +59,8 @@
                             html = ''
                             console.log(data);
                             for (i=0; i < data['teams'].length; i++){
-                                html += '<a href="/teams/app/' + '{{email}}' + '/update_member_teams/'
-                                + data['teams'][i].team_name + '">' + data['teams'][i].team_name + '</a>';
+                                html += '<a href="/teams/app/update_member_teams/' + data['teams'][i].team_name + '">' 
+					    + data['teams'][i].team_name + '</a>';
                             }
                             $("#myDropdown").html(html);
                             $(document).bind("click", clickFunction);

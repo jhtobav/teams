@@ -7,12 +7,12 @@
 <body>
 	<main>
 	    {% block content %}
-            <a href="{% url 'teamsapp:teams' email full_name %}">Go Back</a>	    
+            <a href="{% url 'teamsapp:teams' %}">Go Back</a>	    
             <h1>Team: {{team.name}}</h1>
 	    <h2>User {{full_name}} -- {{email}}</h2>
             <h3>Your team boards:</h3>
 	    {% for board in boards %}
-		<a href="{% url 'dashboard:board' email full_name team.name board.name %}">{{ board.name }}</a>
+		<a href="{% url 'dashboard:board' team.name board.name %}">{{ board.name }}</a>
 		<br>
 	    {% endfor %}
 	    </form>
@@ -39,7 +39,7 @@
         	    Create a new board:
                 <p>
                 Name: <input type="text" name="new_board_name">
-    	        <button type="submit" formaction="{% url 'dashboard:create_board' email full_name team.name %}"> Create </button>
+    	        <button type="submit" formaction="{% url 'dashboard:create_board' team.name %}"> Create </button>
             </form>
             <hr>
         {% endblock %}
@@ -61,9 +61,8 @@
                             html = ''
                             console.log(data);
                             for (i=0; i < data['boards'].length; i++){
-				    html += '<a href="/teams/dashboard/' + '{{email}}' + '/' +  '{{full_name}}' 
-					    + '/' + '{{team.name}}' + '/board/' + data['boards'][i].board_name 
-					    + '">' + data['boards'][i].board_name + '</a>';
+				    html += '<a href="/teams/dashboard/' + '{{team.name}}' + '/board/' 
+					    + data['boards'][i].board_name + '">' + data['boards'][i].board_name + '</a>';
                             }
                             $("#myDropdown").html(html);
                             $(document).bind("click", clickFunction);

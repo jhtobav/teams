@@ -9,11 +9,13 @@ from .models import Board
 from teamsapp.models import Team
 
 
-def dashboard(request, email, full_name, team_name):
+def dashboard(request, team_name):
     """
         Lists the boards of a given team
     """
     if request.method == 'GET':
+        email = request.session.get('email', None)
+        full_name = request.session.get('full_name', None)
         selected_team = Team.objects.get(name=team_name)
         boards = selected_team.board_set.all()
         context = {
@@ -27,7 +29,7 @@ def dashboard(request, email, full_name, team_name):
         return Http404('Not allowed')
 
 
-def create_board(request, email, full_name, team_name):
+def create_board(request, team_name):
     """
         Creates a board for a team
     """
@@ -39,16 +41,18 @@ def create_board(request, email, full_name, team_name):
 
         message = "Board created successfully"
         messages.add_message(request, messages.INFO, message)
-        return redirect('dashboard:dashboard', email=email, full_name=full_name, team_name=team_name)
+        return redirect('dashboard:dashboard', team_name=team_name)
     else:
         return Http404('Not allowed')
 
 
-def board(request, email, full_name, team_name, board_name):
+def board(request, team_name, board_name):
     """
         Shows a board, its columns ands tasks
     """
     if request.method == 'GET':
+        email = request.session.get('email', None)
+        full_name = request.session.get('full_name', None)
         selected_team = Team.objects.get(name=team_name)
         selected_board = selected_team.board_set.get(name=board_name)
         columns = selected_board.column_set.order_by('index')
@@ -64,7 +68,7 @@ def board(request, email, full_name, team_name, board_name):
         return Http404('Not allowed')
 
 
-def delete_board(request, email, full_name, team_name, board_name):
+def delete_board(request, team_name, board_name):
     """
         Deletes a selected board, validates it it doesn't have columns
     """
@@ -76,16 +80,16 @@ def delete_board(request, email, full_name, team_name, board_name):
 
             message = "Board deleted successfully"
             messages.add_message(request, messages.INFO, message)
-            return redirect('dashboard:dashboard', email=email, full_name=full_name, team_name=team_name)
+            return redirect('dashboard:dashboard', team_name=team_name)
         else:
             message = "The board still has columns, it can not be deleted"
             messages.add_message(request, messages.INFO, message)
-            return redirect('dashboard:board', email=email, full_name=full_name, team_name=team_name, board_name=board_name)
+            return redirect('dashboard:board', team_name=team_name, board_name=board_name)
     else:
         return Http404('Not Allowed')
 
 
-def create_column(request, email, full_name, team_name, board_name):
+def create_column(request, team_name, board_name):
     """
         Creates a column inside the board
     """
@@ -98,12 +102,12 @@ def create_column(request, email, full_name, team_name, board_name):
 
         message = "Column created successfully"
         messages.add_message(request, messages.INFO, message)
-        return redirect('dashboard:board', email=email, full_name=full_name, team_name=team_name, board_name=board_name)
+        return redirect('dashboard:board', team_name=team_name, board_name=board_name)
     else:
         return Http404('Not allowed')
 
 
-def delete_column(request, email, full_name, team_name, board_name):
+def delete_column(request, team_name, board_name):
     """
         Deletes a column of the given board, validates if it doesn't have tasks
     """
@@ -116,16 +120,16 @@ def delete_column(request, email, full_name, team_name, board_name):
 
             message = "Column deleted successfully"
             messages.add_message(request, messages.INFO, message)
-            return redirect('dashboard:board', email=email, full_name=full_name, team_name=team_name, board_name=board_name)
+            return redirect('dashboard:board', team_name=team_name, board_name=board_name)
         else:
             message = "The column still has tasks, it can not be deleted"
             messages.add_message(request, messages.INFO, message)
-            return redirect('dashboard:board', email=email, full_name=full_name, team_name=team_name, board_name=board_name)
+            return redirect('dashboard:board', team_name=team_name, board_name=board_name)
     else:
         return Http404('Not allowed')
 
 
-def create_task(request, email, full_name, team_name, board_name):
+def create_task(request, team_name, board_name):
     """
         Creates a task inside a column
     """
@@ -139,12 +143,12 @@ def create_task(request, email, full_name, team_name, board_name):
 
         message = "Task created successfully"
         messages.add_message(request, messages.INFO, message)
-        return redirect('dashboard:board', email=email, full_name=full_name, team_name=team_name, board_name=board_name)
+        return redirect('dashboard:board', team_name=team_name, board_name=board_name)
     else:
         return Http404('Not allowed')
 
 
-def move_task_right(request, email, full_name, team_name, board_name):
+def move_task_right(request, team_name, board_name):
     """
         Moves the task to the next column to the right
     """
@@ -162,12 +166,12 @@ def move_task_right(request, email, full_name, team_name, board_name):
             message = "There is not columns to the right, the task can't be moved"
 
         messages.add_message(request, messages.INFO, message)
-        return redirect('dashboard:board', email=email, full_name=full_name, team_name=team_name, board_name=board_name)
+        return redirect('dashboard:board', team_name=team_name, board_name=board_name)
     else:
         return Http404('Not allowed')
 
 
-def move_task_left(request, email, full_name, team_name, board_name):
+def move_task_left(request, team_name, board_name):
     """
         Moves the task to the next column to the left
     """
@@ -185,12 +189,12 @@ def move_task_left(request, email, full_name, team_name, board_name):
             message = "There is not columns to the left, the task can't be moved"
 
         messages.add_message(request, messages.INFO, message)
-        return redirect('dashboard:board', email=email, full_name=full_name, team_name=team_name, board_name=board_name)
+        return redirect('dashboard:board', team_name=team_name, board_name=board_name)
     else:
         return Http404('Not allowed')
 
 
-def delete_task(request, email, full_name, team_name, board_name):
+def delete_task(request, team_name, board_name):
     """
         Deletes a task
     """
@@ -203,7 +207,7 @@ def delete_task(request, email, full_name, team_name, board_name):
         
         message = "Task deleted successfully"
         messages.add_message(request, messages.INFO, message)
-        return redirect('dashboard:board', email=email, full_name=full_name, team_name=team_name, board_name=board_name)
+        return redirect('dashboard:board', team_name=team_name, board_name=board_name)
     else:
         return Http404('Not allowed')
 

@@ -5,14 +5,14 @@
 	<title>Board</title>
 </head>
 <body>
-	<a href="{% url 'dashboard:dashboard' email full_name team.name %}">Go Back</a>
+	<a href="{% url 'dashboard:dashboard' team.name %}">Go Back</a>
         <h1>Team: {{team.name}}</h1>
         <h2>User {{full_name}} -- {{email}}</h2>
 	<h2>Board: {{board.name}}</h2>
 	<form action="" method="post">
 		{% csrf_token %}
 		<h4>Delete Board:  </h4>
-		<button type="submit" formaction="{% url 'dashboard:delete_board' email full_name team.name board.name %}"> Delete </button>
+		<button type="submit" formaction="{% url 'dashboard:delete_board' team.name board.name %}"> Delete </button>
 	</form>
 	{% if messages %}
             <hr>
@@ -37,11 +37,11 @@
 					{% csrf_token %}
 					<h4>Task: {{task.title}}</h4>
 					<h5>--- {{task.description}}</h5>
-                                        <button type="submit" formaction="{% url 'dashboard:move_task_left' email full_name team.name board.name %}">
+                                        <button type="submit" formaction="{% url 'dashboard:move_task_left' team.name board.name %}">
 						&lt;&lt;&lt;  Move Left </button>
-                                        <button type="submit" formaction="{% url 'dashboard:move_task_right' email full_name team.name board.name %}">
+                                        <button type="submit" formaction="{% url 'dashboard:move_task_right' team.name board.name %}">
                                                 Move Right &gt;&gt;&gt; </button>
-					<button type="submit" formaction="{% url 'dashboard:delete_task' email full_name team.name board.name %}">
+					<button type="submit" formaction="{% url 'dashboard:delete_task' team.name board.name %}">
 						Delete </button>
 				</form>
 				</div>
@@ -54,7 +54,7 @@
 				<p>
 				Tittle: <input type="text" name="title">
 				Description: <input type="text" name="description">
-				<button type="submit" formaction="{% url 'dashboard:create_task' email full_name team.name board.name %}">
+				<button type="submit" formaction="{% url 'dashboard:create_task' team.name board.name %}">
 					Create </button>
 			</form>
 			<hr>
@@ -62,7 +62,7 @@
 				<input type="hidden" name="column_name" value="{{column.name}}">
 				{% csrf_token %}
 				<h4>Delete column: </h4>
-				<button type="submit" formaction="{% url 'dashboard:delete_column' email full_name team.name board.name %}">
+				<button type="submit" formaction="{% url 'dashboard:delete_column' team.name board.name %}">
 					Delete </button>
 			</form>
 			</div>
@@ -75,7 +75,7 @@
 		Create a new column:
 		<p>
 		Name: <input type="text" name="new_column_name">
-		<button type="submit" formaction="{% url 'dashboard:create_column' email full_name team.name board.name %}"> Create </button>
+		<button type="submit" formaction="{% url 'dashboard:create_column' team.name board.name %}"> Create </button>
 	</form>
 	<hr>
 </body>
