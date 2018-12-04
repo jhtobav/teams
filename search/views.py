@@ -4,8 +4,10 @@ from django.http import JsonResponse
 
 from dashboard.models import Board
 from teamsapp.models import Team
+from welcome.views import session_required
 
 
+@session_required
 def search_team_boards(request):
     """
         Search boards on a team given a search pattern
@@ -27,6 +29,7 @@ def search_team_boards(request):
         raise Http404('Not allowed')
 
 
+@session_required
 def search_teams(request):
     """
         Search any team given a search_pattern

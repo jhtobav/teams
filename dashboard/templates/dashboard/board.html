@@ -5,6 +5,8 @@
 	<title>Board</title>
 </head>
 <body>
+	<a href="{% url 'welcome:logout' %}">Logout</a>
+	<br>
 	<a href="{% url 'dashboard:dashboard' team.name %}">Go Back</a>
         <h1>Team: {{team.name}}</h1>
         <h2>User {{full_name}} -- {{email}}</h2>

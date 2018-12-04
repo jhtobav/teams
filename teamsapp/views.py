@@ -4,8 +4,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 
 from .models import Team, Member
+from welcome.views import session_required
 
 
+@session_required
 def teams(request):
     """
         Lists the member teams.
@@ -31,6 +33,7 @@ def teams(request):
         raise Http404('Not allowed')
 
 
+@session_required
 def update_member_teams(request, team_name):
     """
         Adds a selected team to the member teams list.
@@ -52,6 +55,7 @@ def update_member_teams(request, team_name):
         raise Http404('Not allowed')
 
 
+@session_required
 def create_team(request):
     """
         Creates a team. It doesn't relates member and teams, so users have to use the really cool search feature.

@@ -1,8 +1,21 @@
 # welcome/views.py
 import requests
 from django.shortcuts import redirect, render
-from django.http import Http404
+from django.http import Http404, HttpResponseForbidden
 from django.contrib import messages
+
+
+def session_required(view):
+    """
+    Decorator that validates if there is an active session
+    """
+    def validation(*args, **kwargs):
+        request = args[0]
+        if request.session.get('email', None):
+            return view(*args, **kwargs)
+        else:
+            return HttpResponseForbidden('403 Forbbiden, You have to login first to use this amazing app')
+    return validation
 
 
 def index(request):
@@ -27,6 +40,18 @@ def index(request):
             return redirect('welcome:index') 
     else:
         return Http404('Not allowed')
+
+
+def logout(request):
+    """
+    Logs an user out of the system
+    """
+    if request.method == 'GET':
+        del request.session['email']
+        return redirect('welcome:index')
+    else:
+        return Http404('Not allowed')
+
 
 
 def login(email, password):

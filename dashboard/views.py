@@ -7,8 +7,10 @@ from django.utils.text import slugify
 
 from .models import Board
 from teamsapp.models import Team
+from welcome.views import session_required
 
 
+@session_required
 def dashboard(request, team_name):
     """
         Lists the boards of a given team
@@ -29,6 +31,7 @@ def dashboard(request, team_name):
         return Http404('Not allowed')
 
 
+@session_required
 def create_board(request, team_name):
     """
         Creates a board for a team
@@ -46,6 +49,7 @@ def create_board(request, team_name):
         return Http404('Not allowed')
 
 
+@session_required
 def board(request, team_name, board_name):
     """
         Shows a board, its columns ands tasks
@@ -68,6 +72,7 @@ def board(request, team_name, board_name):
         return Http404('Not allowed')
 
 
+@session_required
 def delete_board(request, team_name, board_name):
     """
         Deletes a selected board, validates it it doesn't have columns
@@ -89,6 +94,7 @@ def delete_board(request, team_name, board_name):
         return Http404('Not Allowed')
 
 
+@session_required
 def create_column(request, team_name, board_name):
     """
         Creates a column inside the board
@@ -107,6 +113,7 @@ def create_column(request, team_name, board_name):
         return Http404('Not allowed')
 
 
+@session_required
 def delete_column(request, team_name, board_name):
     """
         Deletes a column of the given board, validates if it doesn't have tasks
@@ -129,6 +136,7 @@ def delete_column(request, team_name, board_name):
         return Http404('Not allowed')
 
 
+@session_required
 def create_task(request, team_name, board_name):
     """
         Creates a task inside a column
@@ -148,6 +156,7 @@ def create_task(request, team_name, board_name):
         return Http404('Not allowed')
 
 
+@session_required
 def move_task_right(request, team_name, board_name):
     """
         Moves the task to the next column to the right
@@ -171,6 +180,7 @@ def move_task_right(request, team_name, board_name):
         return Http404('Not allowed')
 
 
+@session_required
 def move_task_left(request, team_name, board_name):
     """
         Moves the task to the next column to the left
@@ -194,6 +204,7 @@ def move_task_left(request, team_name, board_name):
         return Http404('Not allowed')
 
 
+@session_required
 def delete_task(request, team_name, board_name):
     """
         Deletes a task

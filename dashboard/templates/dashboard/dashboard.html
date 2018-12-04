@@ -7,6 +7,8 @@
 <body>
 	<main>
 	    {% block content %}
+	    <a href="{% url 'welcome:logout' %}">Logout</a>
+	    <br>
             <a href="{% url 'teamsapp:teams' %}">Go Back</a>	    
             <h1>Team: {{team.name}}</h1>
 	    <h2>User {{full_name}} -- {{email}}</h2>

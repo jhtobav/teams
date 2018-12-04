@@ -7,7 +7,7 @@
 <body>
     <main>
         {% block content %}
-            <a href="{% url 'welcome:index' %}">Go Back</a>
+	    <a href="{% url 'welcome:logout' %}">Logout</a>
 	    <h1> Welcome user {{full_name}} -- {{email}}</h1>
             <h2>Your Teams:</h2>
             {% for member_team in member_teams %}
